@@ -8,4 +8,4 @@ SNS投稿用の画像置き場(自動生成)。
 - 作った画像は `images/<アカウント>/` に置き、push 後の URL
   `https://raw.githubusercontent.com/however1006/sns-images/main/images/<アカウント>/<投稿ID>.png`
   を投稿キューの U列「画像URL」に入れる
-- 「line」で作り話を描くときは必ず `"fiction": true`(画像に「※この話は創作です」が入る)
+- 作り話のラベルは付けない(11/5 ユーザー判断)。ただし運営者本人の体験やスクショに見せない(よくある場面の再現として描く)

@@ -1,7 +1,7 @@
 """SNS画像の生成。使い方: python3 render.py spec.json 出力.png
 spec の type: line(トーク画面風) / memo(メモ帳風) / check(あてはまりチェック)
 共通: account(kango/hoiku/daini/main)。必要なフォント: Noto Sans CJK JP / Noto Color Emoji
-line : title(相手の名前), fiction(true なら「※この話は創作です」), messages=[{from:"them"|"me"|"sys", text, time}], footer(問いかけ)
+line : title(相手の名前), fiction(既定 false。ラベルは付けない方針(11/5 ユーザー判断)), messages=[{from:"them"|"me"|"sys", text, time}], footer(問いかけ)
 memo : time(例 "7:42"), title, items=[...](**で囲むとマーカー), footer(省略可)
 check: lead, title, items=[...], result(**で囲むとマーカー)
 """
