@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Data Deletion Instructions / データ削除の手順 - freelance-junbi-poster</title>
+<style>
+  :root { --fg:#1f2328; --muted:#59636e; --bg:#ffffff; --line:#d0d7de; --accent:#0b6e4f; }
+  @media (prefers-color-scheme: dark) { :root { --fg:#e6edf3; --muted:#9198a1; --bg:#0d1117; --line:#30363d; --accent:#3fb98a; } }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--fg); font-family: system-ui, -apple-system, "Segoe UI", "Hiragino Sans", "Noto Sans JP", sans-serif; line-height:1.75; }
+  main { max-width: 760px; margin: 0 auto; padding: 32px 16px 64px; }
+  h1 { font-size: 1.6rem; margin: 0 0 4px; }
+  h2 { font-size: 1.2rem; margin-top: 2.2em; padding-bottom: 4px; border-bottom: 1px solid var(--line); }
+  .meta { color: var(--muted); font-size: .9rem; }
+  a { color: var(--accent); }
+  ol li, ul li { margin-bottom: 6px; }
+  .box { border:1px solid var(--line); border-radius:8px; padding: 12px 16px; margin: 12px 0; }
+  hr { border:0; border-top:1px solid var(--line); margin: 3em 0; }
+</style>
+</head>
+<body>
+<main>
+<h1>Data Deletion Instructions / データ削除の手順</h1>
+<p class="meta">App: freelance-junbi-poster (Threads API) ／ 最終更新・Last updated: 2026-11-10</p>
+<p><a href="#ja">日本語</a> ｜ <a href="#en">English</a> ｜ <a href="privacy.html">プライバシーポリシー / Privacy Policy</a></p>
+
+<section id="ja" lang="ja">
+<h2>本アプリが保存しうる情報</h2>
+<p>本アプリ「freelance-junbi-poster」は、運営者自身の Threads アカウントの情報のほか、運営者の投稿に付いた返信、キーワード検索で見つかった公開投稿(投稿ID・本文・ユーザー名など)を保存することがあります。検索で得た公開投稿の情報は、依頼がなくても取得から30日以内に自動的に削除します。詳しくは <a href="privacy.html">プライバシーポリシー</a> をご覧ください。</p>
+
+<h2>方法1: メールで削除を依頼する</h2>
+<ol>
+<li>【連絡先メール】 宛てに、件名「データ削除依頼」でメールを送ってください。</li>
+<li>本文に、ご自身の Threads ユーザー名(@から始まる名前)を書いてください。対象の投稿が分かる場合は、その投稿のURLも添えてください。</li>
+<li>運営者は、Threads 上でご本人のアカウントであることを確認できる方法(例: そのアカウントからのDMや返信)をお願いする場合があります。</li>
+<li>確認後、30日以内に、Google スプレッドシートと Apps Script に保存されている該当データ(投稿ID・本文・ユーザー名など)を削除し、完了をメールでお知らせします。</li>
+</ol>
+<div class="box">本アプリが Threads 上に送った返信(コメント)の削除をご希望の場合も、同じ方法でご連絡ください。該当する返信を Threads から削除します。</div>
+
+<h2>方法2: Threads の設定から連携を外す(本アプリにログインした方)</h2>
+<p>本アプリは運営者自身のアカウントでのみ使っていますが、本アプリに Threads アカウントを連携した方は、次の手順でいつでも連携を外せます。</p>
+<ol>
+<li>Threads アプリでプロフィールを開き、右上のメニュー(二本線)から「設定」を開きます。</li>
+<li>「アカウント」→「ウェブサイトのアクセス許可」を開きます。</li>
+<li>「アクティブ」の一覧から「freelance-junbi-poster」を選び、「削除」をタップします。</li>
+</ol>
+<p>連携を外すと、本アプリはそのアカウントの情報を新たに取得できなくなります。すでに保存された情報の削除は、方法1でご依頼ください。<br>
+(Threads の画面の表記は、アプリのバージョンや言語設定によって異なる場合があります。)</p>
+
+<h2>連絡先</h2>
+<ul>
+<li>運営者: 【運営者名】(日本の個人事業主)</li>
+<li>連絡先メール: 【連絡先メール】</li>
+<li>住所: 請求があれば遅滞なく開示します。</li>
+</ul>
+</section>
+
+<hr>
+
+<section id="en" lang="en">
+<h2>Information the App may store</h2>
+<p>Besides information about the Operator's own Threads accounts, "freelance-junbi-poster" may store replies to the Operator's posts and public posts found by keyword search (post ID, text, username, etc.). Public post data from search is automatically deleted within 30 days of collection, even without a request. See the <a href="privacy.html">Privacy Policy</a> for details.</p>
+
+<h2>Option 1: Request deletion by email</h2>
+<ol>
+<li>Send an email to [Contact Email] with the subject "Data Deletion Request".</li>
+<li>Include your Threads username (starting with @). If you know the specific post, please include its URL.</li>
+<li>We may ask you to confirm that you own the account (for example, by sending a message or reply from that account on Threads).</li>
+<li>After confirmation, we will delete the relevant data (post ID, text, username, etc.) stored in Google Sheets and Apps Script within 30 days, and notify you by email when it is done.</li>
+</ol>
+<div class="box">If you want a reply (comment) that the App posted on Threads to be removed, please contact us the same way and we will delete it from Threads.</div>
+
+<h2>Option 2: Remove the App from your Threads settings (if you connected your account)</h2>
+<p>The App is used only with the Operator's own accounts, but anyone who connected a Threads account to the App can disconnect it at any time:</p>
+<ol>
+<li>In the Threads app, open your profile and tap the menu (two lines) at the top right, then open "Settings".</li>
+<li>Go to "Account" &rarr; "Website permissions".</li>
+<li>Under "Active", select "freelance-junbi-poster" and tap "Remove".</li>
+</ol>
+<p>Once removed, the App can no longer access new information from that account. To delete information already stored, please use Option 1.<br>
+(Menu labels may vary depending on app version and language settings.)</p>
+
+<h2>Contact</h2>
+<ul>
+<li>Operator: [Operator Name] (sole proprietor, Japan)</li>
+<li>Contact email: [Contact Email]</li>
+<li>Address: Disclosed without delay upon request.</li>
+</ul>
+</section>
+</main>
+</body>
+</html>

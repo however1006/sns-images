@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacy Policy / プライバシーポリシー - freelance-junbi-poster</title>
+<style>
+  :root { --fg:#1f2328; --muted:#59636e; --bg:#ffffff; --line:#d0d7de; --accent:#0b6e4f; }
+  @media (prefers-color-scheme: dark) { :root { --fg:#e6edf3; --muted:#9198a1; --bg:#0d1117; --line:#30363d; --accent:#3fb98a; } }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--fg); font-family: system-ui, -apple-system, "Segoe UI", "Hiragino Sans", "Noto Sans JP", sans-serif; line-height:1.75; }
+  main { max-width: 760px; margin: 0 auto; padding: 32px 16px 64px; }
+  h1 { font-size: 1.6rem; margin: 0 0 4px; }
+  h2 { font-size: 1.2rem; margin-top: 2.2em; padding-bottom: 4px; border-bottom: 1px solid var(--line); }
+  h3 { font-size: 1.02rem; margin-top: 1.6em; }
+  .meta { color: var(--muted); font-size: .9rem; }
+  nav a, a { color: var(--accent); }
+  table { width:100%; border-collapse: collapse; font-size: .92rem; margin: 12px 0; }
+  th, td { border:1px solid var(--line); padding: 8px; text-align:left; vertical-align: top; }
+  th { background: color-mix(in srgb, var(--line) 35%, transparent); }
+  .lang { margin-top: 3em; }
+  hr { border:0; border-top:1px solid var(--line); margin: 3em 0; }
+</style>
+</head>
+<body>
+<main>
+<h1>Privacy Policy / プライバシーポリシー</h1>
+<p class="meta">App: freelance-junbi-poster (Threads API) ／ 制定日・Effective date: 2026-11-10 ／ 最終更新・Last updated: 2026-11-10</p>
+<nav><a href="#ja">日本語</a> ｜ <a href="#en">English</a> ｜ <a href="data-deletion.html">データ削除の手順 / Data Deletion Instructions</a></nav>
+
+<!-- ===================== 日本語 ===================== -->
+<section id="ja" class="lang" lang="ja">
+<h2>1. このポリシーについて</h2>
+<p>本ポリシーは、日本の個人事業主【運営者名】(以下「運営者」)が運営する Meta の開発者アプリ「freelance-junbi-poster」(以下「本アプリ」)における情報の取り扱いを定めるものです。本アプリは、運営者自身が管理する Threads アカウントの投稿予約・インサイト確認・返信管理、および運営者の発信テーマに関係する公開投稿の検索に使う社内向けツールです。一般の利用者がログインして使うサービスではありません。</p>
+
+<h2>2. 取得する情報</h2>
+<table>
+<tr><th>情報</th><th>取得元</th><th>対象</th></tr>
+<tr><td>Threads のユーザーID、ユーザー名、アクセストークン</td><td>Threads の認証(OAuth)</td><td>運営者自身が管理するアカウントのみ</td></tr>
+<tr><td>運営者アカウントの投稿、投稿のインサイト(表示回数・いいね数など)</td><td>Threads API</td><td>運営者自身が管理するアカウントのみ</td></tr>
+<tr><td>運営者アカウントの投稿に付いた返信(返信ID・本文・返信者のユーザー名・日時)</td><td>Threads API</td><td>運営者の投稿に返信した Threads ユーザー</td></tr>
+<tr><td>キーワード検索で見つかった公開投稿(投稿ID・本文・投稿者のユーザー名・日時・投稿URL)</td><td>Threads API(キーワード検索)</td><td>Threads 上で公開されている投稿</td></tr>
+</table>
+<p>本アプリは、運営者以外の方の Threads アカウントにログインしたり、パスワードやメールアドレス、非公開の情報を取得したりすることはありません。</p>
+
+<h2>3. 利用目的</h2>
+<ul>
+<li>運営者アカウントでの投稿の予約と公開</li>
+<li>運営者アカウントの投稿の反応(インサイト)の確認と改善</li>
+<li>運営者の投稿に届いた返信の確認と、返信への応答</li>
+<li>運営者の発信テーマ(フリーランス、看護師の夜勤など)に関係する公開投稿を見つけ、運営者が内容を確認したうえで、共感を示す短いコメントを返信として送ること。検索で得た公開投稿の情報は、コメントする投稿を選ぶためだけに使います。</li>
+</ul>
+<p>上記以外の目的(広告配信、プロファイリング、名簿の作成、販売など)には使いません。</p>
+
+<h2>4. 保存場所と保存期間</h2>
+<ul>
+<li>情報は Google スプレッドシートと Google Apps Script のスクリプトプロパティに保存します。これらは Google LLC(米国)のサービスで、データは米国を含む国外のサーバーに保存される場合があります。</li>
+<li>アクセストークンは Apps Script のスクリプトプロパティにのみ保存し、スプレッドシートや公開の場所には書きません。</li>
+<li>キーワード検索で得た公開投稿の情報(投稿ID・本文・ユーザー名など)は、取得から30日以内に削除します。</li>
+<li>運営者アカウントの投稿・インサイト・返信の記録は、運用の振り返りに必要な間保存し、不要になった時点で削除します。</li>
+</ul>
+
+<h2>5. AI(外部サービス)の利用</h2>
+<p>返信やコメントの下書きを作るために、公開投稿や返信の本文を Anthropic PBC(米国)が提供する AI サービス(Claude)に送信して処理することがあります。送信するのは下書き作成に必要な本文と前後の文脈に限り、アクセストークンなどの認証情報は送信しません。AI が作った下書きは、運営者が内容を確認してから送信します。AI サービスでのデータの扱いは Anthropic のポリシーに従います。</p>
+
+<h2>6. 第三者提供</h2>
+<p>取得した情報を販売したり、第三者に提供したりすることはありません。ただし、上記4・5の保存・処理のために Google および Anthropic のサービスを利用すること、ならびに法令に基づき開示を求められた場合を除きます。</p>
+
+<h2>7. 外国にある第三者への提供について</h2>
+<p>上記4・5のとおり、情報は米国の事業者(Google LLC、Anthropic PBC)のサービス上で保存・処理されます。米国には日本と同等の個人情報保護法制はありませんが、各社は自社のプライバシーポリシーとセキュリティ対策に基づいてデータを取り扱っています。</p>
+
+<h2>8. 安全管理</h2>
+<ul>
+<li>スプレッドシートと Apps Script は運営者の Google アカウントでのみアクセスでき、一般公開しません。</li>
+<li>アクセストークンはコードや文書に直接書かず、スクリプトプロパティで管理します。</li>
+<li>必要最小限の情報のみを取得します。</li>
+</ul>
+
+<h2>9. 開示・訂正・削除のご請求</h2>
+<p>ご自身に関する情報の開示・訂正・利用停止・削除をご希望の場合は、下記の連絡先までご連絡ください。ご本人であることを確認のうえ、遅滞なく対応します。削除の詳しい手順は <a href="data-deletion.html">データ削除の手順</a> をご覧ください。</p>
+
+<h2>10. ポリシーの変更</h2>
+<p>本ポリシーを変更する場合は、このページで改定日とともにお知らせします。</p>
+
+<h2>11. 運営者・お問い合わせ先</h2>
+<ul>
+<li>運営者: 【運営者名】(日本の個人事業主)</li>
+<li>住所: 請求があれば遅滞なく開示します。</li>
+<li>連絡先メール: 【連絡先メール】</li>
+</ul>
+</section>
+
+<hr>
+
+<!-- ===================== English ===================== -->
+<section id="en" class="lang" lang="en">
+<h2>1. About this policy</h2>
+<p>This policy explains how information is handled by "freelance-junbi-poster" (the "App"), a Meta developer app operated by [Operator Name], a sole proprietor in Japan (the "Operator"). The App is an internal tool used only by the Operator to schedule posts, check insights and manage replies on Threads accounts that the Operator owns, and to search public posts related to the Operator's content topics. It is not a service that members of the public log in to.</p>
+
+<h2>2. Information we collect</h2>
+<table>
+<tr><th>Information</th><th>Source</th><th>Whose</th></tr>
+<tr><td>Threads user ID, username and access token</td><td>Threads authorization (OAuth)</td><td>Only accounts owned by the Operator</td></tr>
+<tr><td>Posts and post insights (views, likes, etc.) of the Operator's accounts</td><td>Threads API</td><td>Only accounts owned by the Operator</td></tr>
+<tr><td>Replies to the Operator's posts (reply ID, text, replier's username, timestamp)</td><td>Threads API</td><td>Threads users who replied to the Operator's posts</td></tr>
+<tr><td>Public posts found by keyword search (post ID, text, author's username, timestamp, permalink)</td><td>Threads API (keyword search)</td><td>Posts that are public on Threads</td></tr>
+</table>
+<p>The App never logs in to anyone else's Threads account and does not collect passwords, email addresses or any non-public information.</p>
+
+<h2>3. How we use information</h2>
+<ul>
+<li>To schedule and publish posts on the Operator's accounts</li>
+<li>To review and improve the performance (insights) of the Operator's posts</li>
+<li>To read and respond to replies on the Operator's posts</li>
+<li>To find public posts related to the Operator's topics (e.g. freelancing, night shifts for nurses) and, after the Operator personally reviews each post, send a short, empathetic comment as a reply. Public post data from search is used only to choose which posts to comment on.</li>
+</ul>
+<p>We do not use the information for any other purpose, such as advertising, profiling, building contact lists, or selling data.</p>
+
+<h2>4. Storage and retention</h2>
+<ul>
+<li>Information is stored in Google Sheets and in Google Apps Script script properties, services provided by Google LLC (United States). Data may be stored on servers outside Japan, including in the United States.</li>
+<li>Access tokens are stored only in Apps Script script properties and are never written to spreadsheets or public locations.</li>
+<li>Public post data obtained through keyword search (post ID, text, username, etc.) is deleted within 30 days of collection.</li>
+<li>Records of the Operator's own posts, insights and replies are kept only as long as needed for operational review and are deleted when no longer needed.</li>
+</ul>
+
+<h2>5. Use of AI (external service)</h2>
+<p>To draft replies and comments, the text of public posts or replies may be sent to and processed by an AI service (Claude) provided by Anthropic PBC (United States). Only the text and context needed to write the draft are sent; access tokens and other credentials are never sent. Every AI-generated draft is reviewed by the Operator before it is posted. Anthropic's handling of data is governed by Anthropic's policies.</p>
+
+<h2>6. Sharing with third parties</h2>
+<p>We do not sell or share the information with third parties, except for using Google and Anthropic services for storage and processing as described in sections 4 and 5, or when disclosure is required by law.</p>
+
+<h2>7. Security</h2>
+<ul>
+<li>The spreadsheet and Apps Script project are accessible only through the Operator's Google account and are not public.</li>
+<li>Access tokens are managed in script properties, not written in code or documents.</li>
+<li>We collect only the minimum information necessary.</li>
+</ul>
+
+<h2>8. Your rights</h2>
+<p>If you would like to access, correct, stop the use of, or delete information about you, please contact us at the address below. We will respond without undue delay after confirming your identity. See the <a href="data-deletion.html">Data Deletion Instructions</a> for details.</p>
+
+<h2>9. Changes to this policy</h2>
+<p>If this policy changes, we will post the update on this page with the revised date.</p>
+
+<h2>10. Operator and contact</h2>
+<ul>
+<li>Operator: [Operator Name] (sole proprietor, Japan)</li>
+<li>Address: Disclosed without delay upon request.</li>
+<li>Contact email: [Contact Email]</li>
+</ul>
+</section>
+</main>
+</body>
+</html>
