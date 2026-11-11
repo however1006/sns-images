@@ -146,3 +146,165 @@ function testKeywordSearch() {
   var res = replyFetch_('get', '/keyword_search?q=' + encodeURIComponent('フリーランス') + '&search_type=RECENT&fields=id,text,username,timestamp', token);
   Logger.log('keyword_search: ' + (res.ok ? 'OK ' + (res.body.data || []).length + '件' : 'NG ' + res.text.slice(0, 300)));
 }
+
+/** フォロワー推移(11/10 追加): 毎朝 各アカウントのフォロワー数を「フォロワー推移」タブに1行ずつ記録 */
+function recordFollowers() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sh = ss.getSheetByName('フォロワー推移') || ss.insertSheet('フォロワー推移');
+  if (sh.getLastRow() === 0) sh.appendRow(['日付', 'アカウント', 'フォロワー数', 'エラー']);
+  var day = Utilities.formatDate(new Date(), 'Asia/Tokyo', 'yyyy/MM/dd');
+  REPLY_CFG.ACCOUNTS.forEach(function (acc) {
+    try {
+      var token = replyToken_(acc);
+      var res = UrlFetchApp.fetch('https://graph.threads.net/v1.0/me/threads_insights?metric=followers_count&access_token=' + encodeURIComponent(token), { muteHttpExceptions: true });
+      var j = JSON.parse(res.getContentText());
+      var v = (j.data && j.data[0] && j.data[0].total_value) ? j.data[0].total_value.value : '';
+      sh.appendRow([day, acc, v, j.error ? j.error.message : '']);
+    } catch (e) { sh.appendRow([day, acc, '', String(e)]); }
+  });
+}
+function setupFollowers() {
+  ScriptApp.getProjectTriggers().forEach(function (t) { if (t.getHandlerFunction() === 'recordFollowers') ScriptApp.deleteTrigger(t); });
+  ScriptApp.newTrigger('recordFollowers').timeBased().atHour(7).everyDays(1).inTimezone('Asia/Tokyo').create();
+  recordFollowers();
+}
+
+/** 検証(11/10): 他人の投稿にAPIで返信できるか。dry=trueならコンテナ作成まで(投稿しない) */
+function scToId_(sc) {
+  var a = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_', n = BigInt(0);
+  for (var i = 0; i < sc.length; i++) n = n * BigInt(64) + BigInt(a.indexOf(sc[i]));
+  return n.toString();
+}
+function testReplyOther_(acc, sc, text, dry) {
+  var tok = replyToken_(acc), id = scToId_(sc), base = 'https://graph.threads.net/v1.0/';
+  var g = UrlFetchApp.fetch(base + id + '?fields=id,username,text,timestamp&access_token=' + encodeURIComponent(tok), { muteHttpExceptions: true });
+  Logger.log('GET media: ' + g.getResponseCode() + ' ' + g.getContentText().slice(0, 300));
+  var c = UrlFetchApp.fetch(base + 'me/threads', { method: 'post', muteHttpExceptions: true,
+    payload: { media_type: 'TEXT', text: text, reply_to_id: id, access_token: tok } });
+  Logger.log('CREATE container: ' + c.getResponseCode() + ' ' + c.getContentText().slice(0, 300));
+  if (dry || c.getResponseCode() !== 200) return;
+  Utilities.sleep(30000);
+  var p = UrlFetchApp.fetch(base + 'me/threads_publish', { method: 'post', muteHttpExceptions: true,
+    payload: { creation_id: JSON.parse(c.getContentText()).id, access_token: tok } });
+  Logger.log('PUBLISH: ' + p.getResponseCode() + ' ' + p.getContentText().slice(0, 300));
+}
+function testReplyOtherDry() { testReplyOther_('main', 'DfjQjaJlB6S', 'テスト(送信しません)', true); }
+
+/* ============================================================
+ * search(11/11 本部): キーワード検索 → 人が承認した行だけ返信 → 30日で削除
+ * Meta審査(threads_keyword_search)の申請内容と一致させるための機能。
+ * 審査前は検索結果が自分の投稿だけになる(公式の仕様)。
+ * 使い方: setupSearch() を1回実行 →「検索結果」タブと、毎日の削除トリガーができる。
+ *   runKeywordSearch()   … SEARCH_CFG のキーワードで検索し、新しい投稿を「検索結果」タブに追記
+ *   sendApprovedReplies() … approved にチェックがあり reply_text がある行だけ返信(人の承認が必須)
+ *   purgeOldSearchData()  … 取得から30日を過ぎた行を削除(毎日自動)
+ * ============================================================ */
+var SEARCH_CFG = {
+  SHEET: '検索結果',
+  KEEP_DAYS: 30,
+  DAILY_REPLY_CAP: 15,          // 1アカウント1日の上限
+  OWN: ['freelance_junbi', 'yakinyametai_ns', 'kono_en_muri', 'shinsotsu_muri'],
+  KEYWORDS: {                   // アカウントごとの検索語(少数・テーマ固定)
+    main: ['フリーランス', '独立 準備'],
+    kango: ['看護師 夜勤', '夜勤明け'],
+    hoiku: ['保育園 お迎え', '保育士 辞めたい'],
+    daini: ['仕事 辞めたい', '社会人1年目']
+  }
+};
+var SEARCH_HEADER = ['post_id', 'account', 'keyword', 'username', 'text', 'permalink', 'posted_at',
+  'fetched_at', 'delete_after', 'approved', 'reply_text', 'replied_at', 'reply_id', 'error'];
+
+function searchSheet_() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sh = ss.getSheetByName(SEARCH_CFG.SHEET);
+  if (!sh) {
+    sh = ss.insertSheet(SEARCH_CFG.SHEET);
+    sh.appendRow(SEARCH_HEADER);
+    sh.setFrozenRows(1);
+  }
+  return sh;
+}
+
+function setupSearch() {
+  var sh = searchSheet_();
+  ScriptApp.getProjectTriggers().forEach(function (t) {
+    if (t.getHandlerFunction() === 'purgeOldSearchData') ScriptApp.deleteTrigger(t);
+  });
+  ScriptApp.newTrigger('purgeOldSearchData').timeBased().atHour(4).everyDays(1).inTimezone('Asia/Tokyo').create();
+  Logger.log('「' + sh.getName() + '」タブと、毎日4時の30日削除トリガーを用意しました。');
+}
+
+function runKeywordSearch() {
+  var sh = searchSheet_();
+  var last = sh.getLastRow();
+  var seen = {};
+  if (last > 1) sh.getRange(2, 1, last - 1, 1).getValues().forEach(function (r) { seen[String(r[0])] = true; });
+  var now = new Date(), del = new Date(now.getTime() + SEARCH_CFG.KEEP_DAYS * 86400000);
+  var added = 0;
+  Object.keys(SEARCH_CFG.KEYWORDS).forEach(function (acc) {
+    var token = replyToken_(acc);
+    if (!token) { Logger.log(acc + ': トークンなし'); return; }
+    SEARCH_CFG.KEYWORDS[acc].forEach(function (q) {
+      var url = REPLY_CFG.BASE + '/keyword_search?q=' + encodeURIComponent(q) +
+        '&search_type=RECENT&fields=id,text,username,timestamp,permalink&access_token=' + encodeURIComponent(token);
+      var res = UrlFetchApp.fetch(url, { muteHttpExceptions: true });
+      var j = JSON.parse(res.getContentText() || '{}');
+      if (j.error) { Logger.log(acc + ' / ' + q + ': ' + j.error.message); return; }
+      (j.data || []).forEach(function (p) {
+        if (seen[p.id]) return;
+        seen[p.id] = true;
+        var own = SEARCH_CFG.OWN.indexOf(p.username) >= 0;
+        sh.appendRow([p.id, acc, q, p.username, (p.text || '').slice(0, 500), p.permalink || '', p.timestamp || '',
+          now, del, false, '', '', '', own ? '自分のアカウントの投稿(審査前は自分の投稿だけが返る)' : '']);
+        sh.getRange(sh.getLastRow(), 10).insertCheckboxes();
+        added++;
+      });
+      Logger.log(acc + ' / 「' + q + '」: ' + (j.data || []).length + '件');
+    });
+  });
+  Logger.log('新しく追加: ' + added + '件');
+}
+
+function sendApprovedReplies() {
+  var sh = searchSheet_();
+  var last = sh.getLastRow();
+  if (last < 2) return;
+  var vals = sh.getRange(2, 1, last - 1, SEARCH_HEADER.length).getValues();
+  var today = Utilities.formatDate(new Date(), 'Asia/Tokyo', 'yyyy/MM/dd');
+  var sentToday = {};
+  vals.forEach(function (r) {
+    if (r[11] && Utilities.formatDate(new Date(r[11]), 'Asia/Tokyo', 'yyyy/MM/dd') === today) sentToday[r[1]] = (sentToday[r[1]] || 0) + 1;
+  });
+  vals.forEach(function (r, i) {
+    var row = i + 2, acc = r[1], text = String(r[10] || '').trim();
+    if (r[9] !== true || !text || r[11]) return;                     // 人の承認(チェック)と返信文がある未送信の行だけ
+    if (/https?:\/\/|www\.|DM|【PR】/i.test(text)) { sh.getRange(row, 14).setValue('リンク・PR・DMの誘いを含むため送らない'); return; }
+    if ((sentToday[acc] || 0) >= SEARCH_CFG.DAILY_REPLY_CAP) { sh.getRange(row, 14).setValue('本日の上限に達したため翌日以降'); return; }
+    var token = replyToken_(acc);
+    var c = UrlFetchApp.fetch(REPLY_CFG.BASE + '/me/threads', { method: 'post', muteHttpExceptions: true,
+      payload: { media_type: 'TEXT', text: text, reply_to_id: String(r[0]), access_token: token } });
+    var cj = JSON.parse(c.getContentText() || '{}');
+    if (!cj.id) { sh.getRange(row, 14).setValue((cj.error && cj.error.message) || c.getContentText().slice(0, 200)); return; }
+    Utilities.sleep(30000);
+    var p = UrlFetchApp.fetch(REPLY_CFG.BASE + '/me/threads_publish', { method: 'post', muteHttpExceptions: true,
+      payload: { creation_id: cj.id, access_token: token } });
+    var pj = JSON.parse(p.getContentText() || '{}');
+    if (pj.id) {
+      sh.getRange(row, 12, 1, 3).setValues([[new Date(), pj.id, '']]);
+      sentToday[acc] = (sentToday[acc] || 0) + 1;
+    } else {
+      sh.getRange(row, 14).setValue((pj.error && pj.error.message) || p.getContentText().slice(0, 200));
+    }
+  });
+}
+
+function purgeOldSearchData() {
+  var sh = searchSheet_();
+  var last = sh.getLastRow();
+  if (last < 2) return;
+  var now = new Date(), vals = sh.getRange(2, 9, last - 1, 1).getValues(), removed = 0;
+  for (var i = vals.length - 1; i >= 0; i--) {
+    if (vals[i][0] && new Date(vals[i][0]) <= now) { sh.deleteRow(i + 2); removed++; }
+  }
+  Logger.log('30日を過ぎた行を削除: ' + removed + '件');
+}
